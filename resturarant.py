@@ -1,19 +1,25 @@
 from tkinter import*
 import random
 import time
+import sqlite3
 
 root = Tk()
 root.geometry("1600x700+0+0")
+
+
 root.title("Restaurant Management System")
 
-Tops = Frame(root,bg="white",width = 1600,height=50,relief=SUNKEN)
+Tops = Frame(root,bg='red',width = 1600,height=50,relief=SUNKEN)
 Tops.pack(side=TOP)
 
-f1 = Frame(root,width = 900,height=700,relief=SUNKEN)
-f1.pack(side=LEFT)
 
-f2 = Frame(root ,width = 400,height=700,relief=SUNKEN)
-f2.pack(side=RIGHT)
+f1 = Frame(root,width = 900,height=700,relief=SUNKEN)
+f1.pack(side=TOP)
+#---------------DATABASE--------------
+table2=sqlite3.connect("hotel.db")
+#table2.execute('''CREATE TABLE ORDERS(ORDER_NUMBER INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,FRIES_MEAL TEXT,LUNCH_MEAL TEXT,BURGER_MEAL TEXT,PIZZA_MEAL TEXT,CHEESE_BURGER TEXT,DRINKS TEXT,COST TEXT,SERVICE_CHARGE TEXT,TAX TEXT,SUBTOTAL TEXT,TOTAL TEXT);''')
+#table2.commit()
+
 #------------------TIME--------------
 localtime=time.asctime(time.localtime(time.time()))
 #-----------------INFO TOP------------
@@ -22,29 +28,6 @@ lblinfo.grid(row=0,column=0)
 lblinfo = Label(Tops, font=( 'aria' ,20, ),text=localtime,fg="steel blue",anchor=W)
 lblinfo.grid(row=1,column=0)
 
-#---------------Calculator------------------
-text_Input=StringVar()
-operator =""
-
-txtdisplay = Entry(f2,font=('ariel' ,20,'bold'), textvariable=text_Input , bd=5 ,insertwidth=7 ,bg="white",justify='right')
-txtdisplay.grid(columnspan=4)
-
-def  btnclick(numbers):
-    global operator
-    operator=operator + str(numbers)
-    text_Input.set(operator)
-
-def clrdisplay():
-    global operator
-    operator=""
-    text_Input.set("")
-
-def eqals():
-    global operator
-    sumup=str(eval(operator))
-
-    text_Input.set(sumup)
-    operator = ""
 
 def Ref():
     x=random.randint(12980, 50876)
@@ -65,13 +48,15 @@ def Ref():
     costofcheeseburger = cochee*50
     costofdrinks = codr*35
 
-    costofmeal = "Rs.",str('%.2f'% (costoffries +  costoflargefries + costofburger + costoffilet + costofcheeseburger + costofdrinks))
-    PayTax=((costoffries +  costoflargefries + costofburger + costoffilet +  costofcheeseburger + costofdrinks)*0.33)
-    Totalcost=(costoffries +  costoflargefries + costofburger + costoffilet  + costofcheeseburger + costofdrinks)
-    Ser_Charge=((costoffries +  costoflargefries + costofburger + costoffilet + costofcheeseburger + costofdrinks)/99)
-    Service="Rs.",str('%.2f'% Ser_Charge)
-    OverAllCost="Rs.",str( PayTax + Totalcost + Ser_Charge)
-    PaidTax="Rs.",str('%.2f'% PayTax)
+    costofmeal = "Rs.", str(
+        '%.2f' % (costoffries + costoflargefries + costofburger + costoffilet + costofcheeseburger + costofdrinks))
+    PayTax = ((costoffries + costoflargefries + costofburger + costoffilet + costofcheeseburger + costofdrinks) * 0.33)
+    Totalcost = (costoffries + costoflargefries + costofburger + costoffilet + costofcheeseburger + costofdrinks)
+    Ser_Charge = (
+                (costoffries + costoflargefries + costofburger + costoffilet + costofcheeseburger + costofdrinks) / 99)
+    Service = "Rs.", str('%.2f' % Ser_Charge)
+    OverAllCost = "Rs.", str(PayTax + Totalcost + Ser_Charge)
+    PaidTax = "Rs.", str('%.2f' % PayTax)
 
     Service_Charge.set(Service)
     cost.set(costofmeal)
@@ -85,73 +70,18 @@ def qexit():
 
 def reset():
     rand.set("")
-    Fries.set("")
-    Largefries.set("")
-    Burger.set("")
-    Filet.set("")
-    Subtotal.set("")
-    Total.set("")
-    Service_Charge.set("")
-    Drinks.set("")
-    Tax.set("")
-    cost.set("")
-    Cheese_burger.set("")
+    Fries.set(0.0)
+    Largefries.set(0.0)
+    Burger.set(0.0)
+    Filet.set(0.0)
+    Subtotal.set(0.0)
+    Total.set(0.0)
+    Service_Charge.set(0.0)
+    Drinks.set(0.0)
+    Tax.set(0.0)
+    cost.set(0.0)
+    Cheese_burger.set(0.0)
 
-
-btn7=Button(f2,padx=16,pady=16,bd=4, fg="black", font=('ariel', 20 ,'bold'),text="7",bg="powder blue", command=lambda: btnclick(7) )
-btn7.grid(row=2,column=0)
-
-btn8=Button(f2,padx=16,pady=16,bd=4, fg="black", font=('ariel', 20 ,'bold'),text="8",bg="powder blue", command=lambda: btnclick(8) )
-btn8.grid(row=2,column=1)
-
-btn9=Button(f2,padx=16,pady=16,bd=4, fg="black", font=('ariel', 20 ,'bold'),text="9",bg="powder blue", command=lambda: btnclick(9) )
-btn9.grid(row=2,column=2)
-
-Addition=Button(f2,padx=16,pady=16,bd=4, fg="black", font=('ariel', 20 ,'bold'),text="+",bg="powder blue", command=lambda: btnclick("+") )
-Addition.grid(row=2,column=3)
-#---------------------------------------------------------------------------------------------
-btn4=Button(f2,padx=16,pady=16,bd=4, fg="black", font=('ariel', 20 ,'bold'),text="4",bg="powder blue", command=lambda: btnclick(4) )
-btn4.grid(row=3,column=0)
-
-btn5=Button(f2,padx=16,pady=16,bd=4, fg="black", font=('ariel', 20 ,'bold'),text="5",bg="powder blue", command=lambda: btnclick(5) )
-btn5.grid(row=3,column=1)
-
-btn6=Button(f2,padx=16,pady=16,bd=4, fg="black", font=('ariel', 20 ,'bold'),text="6",bg="powder blue", command=lambda: btnclick(6) )
-btn6.grid(row=3,column=2)
-
-Substraction=Button(f2,padx=16,pady=16,bd=4, fg="black", font=('ariel', 20 ,'bold'),text="-",bg="powder blue", command=lambda: btnclick("-") )
-Substraction.grid(row=3,column=3)
-#-----------------------------------------------------------------------------------------------
-btn1=Button(f2,padx=16,pady=16,bd=4, fg="black", font=('ariel', 20 ,'bold'),text="1",bg="powder blue", command=lambda: btnclick(1) )
-btn1.grid(row=4,column=0)
-
-btn2=Button(f2,padx=16,pady=16,bd=4, fg="black", font=('ariel', 20 ,'bold'),text="2",bg="powder blue", command=lambda: btnclick(2) )
-btn2.grid(row=4,column=1)
-
-btn3=Button(f2,padx=16,pady=16,bd=4, fg="black", font=('ariel', 20 ,'bold'),text="3",bg="powder blue", command=lambda: btnclick(3) )
-btn3.grid(row=4,column=2)
-
-multiply=Button(f2,padx=16,pady=16,bd=4, fg="black", font=('ariel', 20 ,'bold'),text="*",bg="powder blue", command=lambda: btnclick("*") )
-multiply.grid(row=4,column=3)
-#------------------------------------------------------------------------------------------------
-btn0=Button(f2,padx=16,pady=16,bd=4, fg="black", font=('ariel', 20 ,'bold'),text="0",bg="powder blue", command=lambda: btnclick(0) )
-btn0.grid(row=5,column=0)
-
-btnc=Button(f2,padx=16,pady=16,bd=4, fg="black", font=('ariel', 20 ,'bold'),text="c",bg="powder blue", command=clrdisplay)
-btnc.grid(row=5,column=1)
-
-btnequal=Button(f2,padx=16,pady=16,bd=4,width = 16, fg="black", font=('ariel', 20 ,'bold'),text="=",bg="powder blue",command=eqals)
-btnequal.grid(columnspan=4)
-
-Decimal=Button(f2,padx=16,pady=16,bd=4, fg="black", font=('ariel', 20 ,'bold'),text=".",bg="powder blue", command=lambda: btnclick(".") )
-Decimal.grid(row=5,column=2)
-
-Division=Button(f2,padx=16,pady=16,bd=4, fg="black", font=('ariel', 20 ,'bold'),text="/",bg="powder blue", command=lambda: btnclick("/") )
-Division.grid(row=5,column=3)
-status = Label(f2,font=('aria', 15, 'bold'),width = 16, text="-By srijan",bd=2,relief=SUNKEN)
-status.grid(row=7,columnspan=3)
-
-#---------------------------------------------------------------------------------------
 rand = StringVar()
 Fries = StringVar()
 Largefries = StringVar()
@@ -164,6 +94,43 @@ Drinks = StringVar()
 Tax = StringVar()
 cost = StringVar()
 Cheese_burger = StringVar()
+
+reset()
+def billsave():
+    cof = float(Fries.get())
+    colfries = float(Largefries.get())
+    cob = float(Burger.get())
+    cofi = float(Filet.get())
+    cochee = float(Cheese_burger.get())
+    codr = float(Drinks.get())
+
+    costoffries = cof * 25
+    costoflargefries = colfries * 40
+    costofburger = cob * 35
+    costoffilet = cofi * 50
+    costofcheeseburger = cochee * 50
+    costofdrinks = codr * 35
+
+    costofmeal = "Rs.", str(
+        '%.2f' % (costoffries + costoflargefries + costofburger + costoffilet + costofcheeseburger + costofdrinks))
+    PayTax = ((costoffries + costoflargefries + costofburger + costoffilet + costofcheeseburger + costofdrinks) * 0.33)
+    Totalcost = (costoffries + costoflargefries + costofburger + costoffilet + costofcheeseburger + costofdrinks)
+    Ser_Charge = (
+            (costoffries + costoflargefries + costofburger + costoffilet + costofcheeseburger + costofdrinks) / 99)
+    Service = "Rs.", str('%.2f' % Ser_Charge)
+    OverAllCost = "Rs.", str(PayTax + Totalcost + Ser_Charge)
+    PaidTax = "Rs.", str('%.2f' % PayTax)
+
+    Service_Charge.set(Service)
+    cost.set(costofmeal)
+    Tax.set(PaidTax)
+    Subtotal.set(costofmeal)
+    Total.set(OverAllCost)
+    table2.execute("INSERT INTO ORDERS(FRIES_MEAL,LUNCH_MEAL,BURGER_MEAL,PIZZA_MEAL,CHEESE_BURGER,DRINKS,COST,SERVICE_CHARGE,TAX,SUBTOTAL,TOTAL) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (str(costoffries),str(costoflargefries),str(costofburger),str(costoffilet),str(costofcheeseburger),str(costofdrinks),str(costofmeal),str(Service),str(PaidTax ),str(Totalcost),str(OverAllCost),))
+    table2.commit()
+    for row in table2.execute("SELECT * FROM ORDERS"):
+        print(row)
+
 
 
 lblreference = Label(f1, font=( 'aria' ,16, 'bold' ),text="Order No.",fg="steel blue",bd=10,anchor='w')
@@ -240,6 +207,10 @@ btnreset.grid(row=7, column=2)
 
 btnexit=Button(f1,padx=16,pady=8, bd=10 ,fg="black",font=('ariel' ,16,'bold'),width=10, text="EXIT", bg="powder blue",command=qexit)
 btnexit.grid(row=7, column=3)
+
+btnbill=Button(f1,padx=16,pady=8, bd=10 ,fg="black",font=('ariel' ,16,'bold'),width=10, text="SAVE BILL", bg="powder blue",command=billsave)
+btnbill.grid(row=8, column=3)
+
 
 def price():
     roo = Tk()
